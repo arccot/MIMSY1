@@ -41,7 +41,7 @@ namespace WebApplication2
                     DropDownList1.DataSource = reader;
                     DropDownList1.DataTextField = "objtype";
                     DropDownList1.DataBind();
-\            }
+            }
         }
         //when button is clicked, redirect to search page
         //with selected type and search string
