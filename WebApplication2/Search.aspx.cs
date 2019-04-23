@@ -84,10 +84,13 @@ namespace WebApplication2
             //prevent multiple threads from accessing database at same time
             lock (x)
             {
-                conn = new OleDbConnection(
-                "Provider=Microsoft.ACE.OLEDB.12.0; " +
-                "Data Source=" + Server.MapPath("Data/Mmsydata.accdb"));
-                conn.Open();
+                if (conn == null)
+                {
+                    conn = new OleDbConnection(
+                    "Provider=Microsoft.ACE.OLEDB.12.0; " +
+                    "Data Source=" + Server.MapPath("Data/Mmsydata.accdb"));
+                    conn.Open();
+                }
             }
         }
         protected void Page_Load(object sender, EventArgs e)

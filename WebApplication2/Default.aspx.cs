@@ -25,8 +25,8 @@ namespace WebApplication2
                     conn = new OleDbConnection(
                     "Provider=Microsoft.ACE.OLEDB.12.0; " +
                     "Data Source=" + Server.MapPath("Data/Mmsydata.accdb"));
+                    conn.Open();
                 }
-                conn.Open();
             }
         }
         //creates dropdownlist populated with Type table
