@@ -14,38 +14,40 @@ namespace WebApplication2
     {
         static OleDbConnection conn = null;
         static OleDbDataReader reader = null;
-
-
+        static Object x = false;
         private void LoadDB()
         {
-            conn = new OleDbConnection(
-    "Provider=Microsoft.ACE.OLEDB.12.0; " +
-    "Data Source=" + Server.MapPath("Data/Mmsydata.accdb"));
-            conn.Open();
+            //prevent multiple threads from accessing database at same time
+            lock(x)
+            {
+                if (conn == null)
+                {
+                    conn = new OleDbConnection(
+                    "Provider=Microsoft.ACE.OLEDB.12.0; " +
+                    "Data Source=" + Server.MapPath("Data/Mmsydata.accdb"));
+                }
+                conn.Open();
+            }
         }
-
+        //creates dropdownlist populated with Type table
         private void CreateTypeList()
         {
+
             if (conn == null || reader == null)
             {
-
                     OleDbCommand cmd =
                         new OleDbCommand("Select * FROM Type", conn);
                     reader = cmd.ExecuteReader();
                     DropDownList1.DataSource = reader;
                     DropDownList1.DataTextField = "objtype";
                     DropDownList1.DataBind();
-
-                //        catch (Exception e)
-                //        {
-                //            Response.Write(e.Message);
-                //            Response.End();
-                //        }
-            }
+\            }
         }
+        //when button is clicked, redirect to search page
+        //with selected type and search string
         protected void Btn_Click(object sender, EventArgs e)
         {
-            //sanitize input
+            //sanitize input to prevent SQL injection
             string value = txtSearch.Text.Trim();
             value = value.Replace('\'', ' ');
             string selection = DropDownList1.SelectedValue;
@@ -54,22 +56,6 @@ namespace WebApplication2
             string url = "Search.aspx?query=" + HttpUtility.UrlEncode(value)
                 + "&type=" + selection;
             Response.Redirect(url);
-
-            //OleDbDataReader reader2 = null;
-            //string value = txtSearch.Text.Trim();
-            //string selection = DropDownList1.SelectedValue;
-
-            ////sanitize input
-            //value = value.Replace('\'', ' ');
-            //selection = selection.Replace('\'', ' ');
-            //string query = "Select * FROM MIMSY1 WHERE [objname] LIKE '%"
-            //    + value + "%' AND [objtype]='" + selection + "' ";
-            //OleDbCommand cmd =
-            //    new OleDbCommand(query, conn);
-            //reader2 = cmd.ExecuteReader();
-
-            //GridView1.DataSource = reader2;
-            //GridView1.DataBind();
         }
 
         protected void Page_Load(object sender, EventArgs e)
