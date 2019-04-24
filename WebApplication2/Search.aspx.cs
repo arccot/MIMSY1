@@ -33,10 +33,13 @@ namespace WebApplication2
         //passing the counter of the selected row
         protected void DisplayFullRecord(object sender, EventArgs e)
         {
-            GridViewRow row = GridView2.SelectedRow;
-            string value = row.Cells[0].Text;
-            string url = "Details.aspx?counter=" + HttpUtility.UrlEncode(value);
-            Response.Redirect(url);
+            if (GridView2.HasAttributes)
+            {
+                GridViewRow row = GridView2.SelectedRow;
+                string value = row.Cells[0].Text;
+                string url = "Details.aspx?counter=" + HttpUtility.UrlEncode(value);
+                Response.Redirect(url);
+            }
 
         }
         
