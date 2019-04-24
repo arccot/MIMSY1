@@ -33,14 +33,13 @@ namespace WebApplication2
         //passing the counter of the selected row
         protected void DisplayFullRecord(object sender, EventArgs e)
         {
-            if (GridView2.HasAttributes)
+            if (GridView2.SelectedRow != null)
             {
                 GridViewRow row = GridView2.SelectedRow;
                 string value = row.Cells[0].Text;
                 string url = "Details.aspx?counter=" + HttpUtility.UrlEncode(value);
                 Response.Redirect(url);
             }
-
         }
         
         protected void OnRowDataBound(object sender, GridViewRowEventArgs e)
@@ -98,6 +97,7 @@ namespace WebApplication2
         }
         protected void Page_Load(object sender, EventArgs e)
         {
+            Response.Cache.SetCacheability(HttpCacheability.NoCache);
             LoadDB();
             DisplayTable();
         }
