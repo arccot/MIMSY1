@@ -11,8 +11,6 @@ namespace WebApplication2
 {
     public partial class _Search : System.Web.UI.Page
     {
-        static OleDbConnection conn = null;
-        static OleDbDataReader reader = null;
        
         //selects entries from database that match search queries, and displays in table
         protected void DisplayTable()
@@ -21,13 +19,12 @@ namespace WebApplication2
             string typeQuery = Request.QueryString["type"];
             string query = "Select counter, Sorts, objname, description, objtype, Key1 FROM MIMSY1 WHERE [objname] LIKE '%"
                 + searchQuery + "%' AND [objtype]='" + typeQuery + "' ";
-
-            OleDbCommand cmd =
-                new OleDbCommand(query, conn);
-            reader = cmd.ExecuteReader();
+            OleDbDataReader reader = DBManager.dBManager.RunCMD(query);
 
             GridView2.DataSource = reader;
             GridView2.DataBind();
+            reader.Close();
+
         }
         //when button is clicked, redirect to Details page,
         //passing the counter of the selected row
@@ -80,31 +77,14 @@ namespace WebApplication2
                 }
             }
         }
-        static Object x = false;
-        private void LoadDB()
-        {
-            //prevent multiple threads from accessing database at same time
-            lock (x)
-            {
-                if (conn == null)
-                {
-                    conn = new OleDbConnection(
-                    "Provider=Microsoft.ACE.OLEDB.12.0; " +
-                    "Data Source=" + Server.MapPath("Data/Mmsydata.accdb"));
-                    conn.Open();
-                }
-            }
-        }
         protected void Page_Load(object sender, EventArgs e)
         {
             Response.Cache.SetCacheability(HttpCacheability.NoCache);
-            LoadDB();
             DisplayTable();
         }
         static void OnProcessExit(object sender, EventArgs e)
         {
-            if (reader != null) reader.Close();
-            if (conn != null) conn.Close();
+            DBManager.dBManager.Close();
         }
     }
 }
