@@ -28,7 +28,7 @@ namespace WebApplication2
             //sanitize input to prevent SQL injection
             string value = txtSearch.Text.Trim();
             value = value.Replace('\'', ' ');
-            string selection = DropDownList1.SelectedValue;
+            string selection = HttpUtility.UrlEncode(DropDownList1.SelectedValue);
             selection = selection.Replace('\'', ' ');
 
             string url = "Search.aspx?query=" + HttpUtility.UrlEncode(value)
