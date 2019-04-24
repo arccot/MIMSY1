@@ -13,7 +13,7 @@ namespace WebApplication2
         //Display full MIMSY1 record and all associated documents with same counter
         protected void DisplayTable()
         {
-            string counter = Request.QueryString["counter"];
+            string counter = Request.QueryString["counter"].Replace('\'', ' ');
             string query = "Select * FROM MIMSY1 WHERE [counter]=" + counter;
 
             OleDbDataReader reader = DBManager.dBManager.RunCMD(query);

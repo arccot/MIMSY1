@@ -15,8 +15,8 @@ namespace WebApplication2
         //selects entries from database that match search queries, and displays in table
         protected void DisplayTable()
         {
-            string searchQuery = Request.QueryString["query"];
-            string typeQuery = Request.QueryString["type"];
+            string searchQuery = Request.QueryString["query"].Replace('\'', ' ');
+            string typeQuery = Request.QueryString["type"].Replace('\'', ' ');
             string query = "Select counter, Sorts, objname, description, objtype, Key1 FROM MIMSY1 WHERE [objname] LIKE '%"
                 + searchQuery + "%' AND [objtype]='" + typeQuery + "' ";
             OleDbDataReader reader = DBManager.dBManager.RunCMD(query);
