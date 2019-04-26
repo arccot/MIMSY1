@@ -10,9 +10,14 @@ namespace WebApplication2
     public class DBManager : Page
     {
 
-        public static DBManager dBManager = new DBManager();
+        public static DBManager dBManager = new DBManager(); //declare singleton
+        private DBManager()
+        {
+        }
+
         OleDbConnection conn = null;
         readonly Object x = false;
+
         private void LoadDB()
         {
             //prevent multiple threads from accessing database at same time

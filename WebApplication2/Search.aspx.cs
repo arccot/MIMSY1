@@ -16,15 +16,19 @@ namespace WebApplication2
         protected void DisplayTable()
         {
             string searchQuery = Request.QueryString["query"].Replace('\'', ' ');
-            string typeQuery = Request.QueryString["type"].Replace('\'', ' ');
             string query = "Select counter, Sorts, objname, description, objtype, Key1 FROM MIMSY1 WHERE [objname] LIKE '%"
-                + searchQuery + "%' AND [objtype]='" + typeQuery + "' ";
-            OleDbDataReader reader = DBManager.dBManager.RunCMD(query);
+                            + searchQuery + "%'";
+            string typeQuery = null;
+            if (Request.QueryString["type"] != null)
+            {
+                typeQuery = Request.QueryString["type"].Replace('\'', ' ');
+                query += " AND [objtype]='" + typeQuery + "' ";
+            }
 
+            OleDbDataReader reader = DBManager.dBManager.RunCMD(query);
             GridView2.DataSource = reader;
             GridView2.DataBind();
             reader.Close();
-
         }
         //when button is clicked, redirect to Details page,
         //passing the counter of the selected row

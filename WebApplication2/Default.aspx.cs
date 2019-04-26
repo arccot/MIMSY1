@@ -19,6 +19,7 @@ namespace WebApplication2
             DropDownList1.DataSource = reader;
             DropDownList1.DataTextField = "objtype";
             DropDownList1.DataBind();
+            DropDownList1.Items.Insert(0, "");
             reader.Close();
         }
         //when button is clicked, redirect to search page
@@ -28,11 +29,17 @@ namespace WebApplication2
             //sanitize input to prevent SQL injection
             string value = txtSearch.Text.Trim();
             value = value.Replace('\'', ' ');
-            string selection = HttpUtility.UrlEncode(DropDownList1.SelectedValue);
+            string selection = DropDownList1.SelectedValue;
             selection = selection.Replace('\'', ' ');
-
+            if (String.IsNullOrWhiteSpace(selection))
+            {
+                selection = "";
+            } else
+            {
+                selection = "&type=" + HttpUtility.UrlEncode(selection);
+            }
             string url = "Search.aspx?query=" + HttpUtility.UrlEncode(value)
-                + "&type=" + selection;
+                + selection;
             Response.Redirect(url);
         }
 
